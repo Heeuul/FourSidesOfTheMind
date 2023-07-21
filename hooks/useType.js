@@ -68,7 +68,7 @@ export const TypeProvider = ({ children }) => {
   }
 
   function GetQuadra(type) {
-    const quadra = type.substring(1, 3);
+    const quadra = type.substring(1, 4);
 
     if (quadra === "STP" || quadra === "NFJ") return "Templar";
     if (quadra === "STJ" || quadra === "NFP") return "Philosopher";
@@ -78,7 +78,6 @@ export const TypeProvider = ({ children }) => {
 
   function GetExpressionFull(type) {
     const expression = GetExpression(type);
-
     return {
       expression: expression,
       communication: GetCommunication(expression),
@@ -87,28 +86,28 @@ export const TypeProvider = ({ children }) => {
     };
   }
   function GetExpression(type) {
-    const exp1 = type.substring(0, 2);
-    const exp2 = type.splice(2, 1);
+    const exp1 = type.substring(0, 3);
+    const exp2 = type.slice(0, 2) + type.slice(3);
 
     if (exp1 === "EST" || exp2 === "ENJ") return "Structure";
     if (exp1 === "ESF" || exp2 === "ENP") return "Starter";
     if (exp1 === "IST" || exp2 === "INJ") return "Finisher";
-    if (exp1 === "ISF" || exp2 === "INT") return "Background";
+    if (exp1 === "ISF" || exp2 === "INP") return "Background";
   }
   function GetCommunication(type) {
-    const exp = type.length(4) ? GetExpression(type) : type;
+    const exp = type.length === 4 ? GetExpression(type) : type;
 
     if (exp === "Structure" || exp === "Finisher") return "Direct";
     if (exp === "Starter" || exp === "Background") return "Informative";
   }
   function GetRole(type) {
-    if (type.length(4)) return type[0] === "E" ? "Initiating" : "Responding";
+    if (type.length === 4) return type[0] === "E" ? "Initiating" : "Responding";
 
     if (type === "Structure" || type === "Starter") return "Initiating";
     if (type === "Finisher" || type === "Background") return "Responding";
   }
   function GetGoalFocus(type) {
-    const exp = type.length(4) ? GetExpression(type) : type;
+    const exp = type.length === 4 ? GetExpression(type) : type;
 
     if (exp === "Structure" || exp === "Background") return "Outcome";
     if (exp === "Starter" || exp === "Finisher") return "Progression";
@@ -121,32 +120,32 @@ export const TypeProvider = ({ children }) => {
       worldview: worldview,
       tangibility: GetTangibility(worldview),
       value: GetValue(worldview),
-      process: GetPreference(worldview),
+      process: GetProcess(worldview),
     };
   }
   function GetWorldview(type) {
     const wv1 = type[1] + type[3];
-    const wv2 = type.substring(1, 2);
+    const wv2 = type.substring(1, 3);
 
     if (wv1 === "SJ") return "Guardian";
     if (wv1 === "SP") return "Artisan";
-    if (wv2 === "SJ") return "Intellectual";
-    if (wv2 === "SJ") return "Idealist";
+    if (wv2 === "NT") return "Intellectual";
+    if (wv2 === "NF") return "Idealist";
   }
   function GetTangibility(type) {
-    const wv = type.length(4) ? GetWorldview(type) : type;
+    const wv = type.length === 4 ? GetWorldview(type) : type;
 
     if (wv === "Guardian" || wv === "Artisan") return "Concrete";
     if (wv === "Intellectual" || wv === "Idealist") return "Abstract";
   }
   function GetValue(type) {
-    const wv = type.length(4) ? GetWorldview(type) : type;
+    const wv = type.length === 4 ? GetWorldview(type) : type;
 
     if (wv === "Artisan" || wv === "Intellectual") return "Pragmatic";
     if (wv === "Guardian" || wv === "Idealist") return "Affliative";
   }
   function GetProcess(type) {
-    const wv = type.length(4) ? GetWorldview(type) : type;
+    const wv = type.length === 4 ? GetWorldview(type) : type;
 
     if (wv === "Guardian" || wv === "Intellectual") return "Systematic";
     if (wv === "Artisan" || wv === "Idealist") return "Interest";
@@ -156,7 +155,7 @@ export const TypeProvider = ({ children }) => {
     return { arsenal: GetArsenal(type), affinity: GetAffinity(type) };
   }
   function GetArsenal(type) {
-    const arsenal = type.substring(2, 3);
+    const arsenal = type.substring(2, 4);
 
     if (arsenal === "TP" || arsenal === "FJ") return "Sword & Mace";
     if (arsenal === "TJ" || arsenal === "FP") return "Spear & Bow";
