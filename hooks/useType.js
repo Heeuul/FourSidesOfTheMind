@@ -67,6 +67,107 @@ export const TypeProvider = ({ children }) => {
     );
   }
 
+  function GetQuadra(type) {
+    const quadra = type.substring(1, 3);
+
+    if (quadra === "STP" || quadra === "NFJ") return "Templar";
+    if (quadra === "STJ" || quadra === "NFP") return "Philosopher";
+    if (quadra === "SFJ" || quadra === "NTP") return "Crusader";
+    if (quadra === "SFP" || quadra === "NTJ") return "Wayfarer";
+  }
+
+  function GetExpressionFull(type) {
+    const expression = GetExpression(type);
+
+    return {
+      expression: expression,
+      communication: GetCommunication(expression),
+      role: GetRole(expression),
+      goalFocus: GetGoalFocus(expression),
+    };
+  }
+  function GetExpression(type) {
+    const exp1 = type.substring(0, 2);
+    const exp2 = type.splice(2, 1);
+
+    if (exp1 === "EST" || exp2 === "ENJ") return "Structure";
+    if (exp1 === "ESF" || exp2 === "ENP") return "Starter";
+    if (exp1 === "IST" || exp2 === "INJ") return "Finisher";
+    if (exp1 === "ISF" || exp2 === "INT") return "Background";
+  }
+  function GetCommunication(type) {
+    const exp = type.length(4) ? GetExpression(type) : type;
+
+    if (exp === "Structure" || exp === "Finisher") return "Direct";
+    if (exp === "Starter" || exp === "Background") return "Informative";
+  }
+  function GetRole(type) {
+    if (type.length(4)) return type[0] === "E" ? "Initiating" : "Responding";
+
+    if (type === "Structure" || type === "Starter") return "Initiating";
+    if (type === "Finisher" || type === "Background") return "Responding";
+  }
+  function GetGoalFocus(type) {
+    const exp = type.length(4) ? GetExpression(type) : type;
+
+    if (exp === "Structure" || exp === "Background") return "Outcome";
+    if (exp === "Starter" || exp === "Finisher") return "Progression";
+  }
+
+  function GetWorldviewFull(type) {
+    const worldview = GetWorldview(type);
+
+    return {
+      worldview: worldview,
+      tangibility: GetTangibility(worldview),
+      value: GetValue(worldview),
+      process: GetProcess(worldview),
+    };
+  }
+  function GetWorldview(type) {
+    const wv1 = type[1] + type[3];
+    const wv2 = type.substring(1, 2);
+
+    if (wv1 === "SJ") return "Guardian";
+    if (wv1 === "SP") return "Artisan";
+    if (wv2 === "SJ") return "Intellectual";
+    if (wv2 === "SJ") return "Idealist";
+  }
+  function GetTangibility(type) {
+    const wv = type.length(4) ? GetWorldview(type) : type;
+
+    if (wv === "Guardian" || wv === "Artisan") return "Concrete";
+    if (wv === "Intellectual" || wv === "Idealist") return "Abstract";
+  }
+  function GetValue(type) {
+    const wv = type.length(4) ? GetWorldview(type) : type;
+
+    if (wv === "Artisan" || wv === "Intellectual") return "Pragmatic";
+    if (wv === "Guardian" || wv === "Idealist") return "Affliative";
+  }
+  function GetProcess(type) {
+    const wv = type.length(4) ? GetWorldview(type) : type;
+
+    if (wv === "Guardian" || wv === "Intellectual") return "Systematic";
+    if (wv === "Artisan" || wv === "Idealist") return "Interest";
+  }
+
+  function GetArmament(type) {
+    return { arsenal: GetArsenal(type), affinity: GetAffinity(type) };
+  }
+  function GetArsenal(type) {
+    const arsenal = type.substring(2, 3);
+
+    if (arsenal === "TP" || arsenal === "FJ") return "Sword & Mace";
+    if (arsenal === "TJ" || arsenal === "FP") return "Spear & Bow";
+  }
+  function GetAffinity(type) {
+    const affinity = type[1] + type[3];
+
+    if (affinity === "SP" || affinity === "NJ") return "Fire & Wind";
+    if (affinity === "SJ" || affinity === "NP") return "Earth & Water";
+  }
+
   const typeMemo = useMemo(
     () => ({
       FlipEnergy: () => SetEnergy(!energy),
