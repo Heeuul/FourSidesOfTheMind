@@ -2,26 +2,26 @@ import { createContext, useContext, useMemo, useState } from "react";
 
 const TypeContext = createContext({});
 export const TypeProvider = ({ children }) => {
-  /*prettier-ignore*/ const [energy,   SetEnergy]   = useState(true); // E:true, I:false
-  /*prettier-ignore*/ const [perceive, SetPerceive] = useState(true); // S:true, N:false
-  /*prettier-ignore*/ const [judge,    SetJudge]    = useState(true); // T:true, F:false
-  /*prettier-ignore*/ const [process,  SetProcess]  = useState(true); // P:true, J:false
+  /*prettier-ignore*/ const [energy,     SetEnergy    ] = useState(true); // E:true, I:false
+  /*prettier-ignore*/ const [perceive,   SetPerceive  ] = useState(true); // S:true, N:false
+  /*prettier-ignore*/ const [judge,      SetJudge     ] = useState(true); // T:true, F:false
+  /*prettier-ignore*/ const [preference, SetPreference] = useState(true); // P:true, J:false
 
-  /*prettier-ignore*/ function GetEnergy(energy)     { return energy ? "E" : "I";   }
-  /*prettier-ignore*/ function GetPerceive(perceive) { return perceive ? "S" : "N"; }
-  /*prettier-ignore*/ function GetJudge(judge)       { return judge ? "T" : "F";    }
-  /*prettier-ignore*/ function GetProcess(process)   { return process ? "P" : "J";  }
+  /*prettier-ignore*/ function GetEnergy(energy)         { return energy     ? "E" : "I"; }
+  /*prettier-ignore*/ function GetPerceive(perceive)     { return perceive   ? "S" : "N"; }
+  /*prettier-ignore*/ function GetJudge(judge)           { return judge      ? "T" : "F"; }
+  /*prettier-ignore*/ function GetPreference(preference) { return preference ? "P" : "J"; }
 
   function GetType(side) {
     switch (side) {
       // prettier-ignore
-      case "Ego"        : return (GetEnergy(energy) + GetPerceive(perceive) + GetJudge(judge) + GetProcess(process));
+      case "Ego"        : return (GetEnergy(energy) + GetPerceive(perceive) + GetJudge(judge) + GetPreference(preference));
       // prettier-ignore
-      case "Subconcious": return (GetEnergy(!energy) + GetPerceive(!perceive) + GetJudge(!judge) + GetProcess(!process));
+      case "Subconcious": return (GetEnergy(!energy) + GetPerceive(!perceive) + GetJudge(!judge) + GetPreference(!preference));
       // prettier-ignore
-      case "Unconcious" : return (GetEnergy(!energy) + GetPerceive(perceive) + GetJudge(judge) + GetProcess(!process));
+      case "Unconcious" : return (GetEnergy(!energy) + GetPerceive(perceive) + GetJudge(judge) + GetPreference(!preference));
       // prettier-ignore
-      case "Superego"   : return (GetEnergy(energy) + GetPerceive(!perceive) + GetJudge(!judge) + GetProcess(process));
+      case "Superego"   : return (GetEnergy(energy) + GetPerceive(!perceive) + GetJudge(!judge) + GetPreference(preference));
     }
   }
   function GetLabel(side) {
@@ -121,7 +121,7 @@ export const TypeProvider = ({ children }) => {
       worldview: worldview,
       tangibility: GetTangibility(worldview),
       value: GetValue(worldview),
-      process: GetProcess(worldview),
+      process: GetPreference(worldview),
     };
   }
   function GetWorldview(type) {
@@ -173,7 +173,7 @@ export const TypeProvider = ({ children }) => {
       FlipEnergy: () => SetEnergy(!energy),
       FlipPerceive: () => SetPerceive(!perceive),
       FlipJudge: () => SetJudge(!judge),
-      FlipProcess: () => SetProcess(!process),
+      FlipPreference: () => SetPreference(!preference),
       GetType,
       GetLabel,
       GetFunctionStack,
@@ -193,7 +193,7 @@ export const TypeProvider = ({ children }) => {
       GetArsenal,
       GetAffinity,
     }),
-    [energy, perceive, judge, process]
+    [energy, perceive, judge, preference]
   );
 
   return (

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import useType from "../hooks/useType";
 import { FlatList } from "react-native";
@@ -12,10 +12,16 @@ export default function Side({ nav, side }) {
     FlipEnergy,
     FlipPerceive,
     FlipJudge,
-    FlipProcess,
+    FlipPreference,
   } = useType();
-  const type = GetType(side);
-  const functionStack = GetFunctionStack(type);
+  
+  const [type, SetType] = useState(""); 
+  const [functionStack, SetFunctionStack] = useState([]); 
+
+  useEffect(() => {
+    SetType(GetType(side)); 
+    SetFunctionStack(GetFunctionStack(GetType(side)));
+  }, [GetType]); 
 
   function RenderItem(item, index) {
     return (
@@ -44,7 +50,7 @@ export default function Side({ nav, side }) {
         FlipJudge();
         return;
       case 3:
-        FlipProcess();
+        FlipPreference();
         return;
     }
   }
