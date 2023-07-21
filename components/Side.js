@@ -1,38 +1,104 @@
-import { View, Text } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
+
+import useType from "../hooks/useType";
 import { FlatList } from "react-native";
 
-const egoLabels = ["Hero", "Parent", "Child", "Inferior"];
-const uncLabels = ["Nemesis", "Critic", "Trickster", "Demon"];
-const subLabels = ["Hero", "Parent", "Child", "Inferior"];
-const supLabels = ["Nemesis", "Critic", "Trickster", "Demon"];
+export default function Side({ nav, side }) {
+  const {
+    GetType,
+    GetFunctionStack,
+    GetFunctionName,
+    FlipEnergy,
+    FlipPerceive,
+    FlipJudge,
+    FlipProcess,
+  } = useType();
+  const type = GetType(side);
+  const functionStack = GetFunctionStack(type);
 
-export default function Side({ type, side }) {
-  //prettier-ignore
-  function GetSideData() {
-    switch (side) {
-      case "Ego"        : return egoLabels;
-      case "Subconcious": return subLabels;
-      case "Unconcious" : return uncLabels;
-      case "Superego"   : return supLabels;
+  function RenderItem(item, index) {
+    return (
+      <View style={styles.sideContainer}>
+        <TouchableOpacity
+          style={styles.letterButton}
+          onPress={() => FlipFunction(index)}
+        >
+          <Text style={styles.letterText}>{type[index]}</Text>
+        </TouchableOpacity>
+        <View style={styles.functionContainer}>
+          <Text style={styles.functionText}>{GetFunctionName(item)}</Text>
+        </View>
+      </View>
+    );
+  }
+  function FlipFunction(index) {
+    switch (index) {
+      case 0:
+        FlipEnergy();
+        return;
+      case 1:
+        FlipPerceive();
+        return;
+      case 2:
+        FlipJudge();
+        return;
+      case 3:
+        FlipProcess();
+        return;
     }
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      {/* Letters */}
-      <Text style={{ textAlign: "center", fontSize: 50 }}>{type}</Text>
-
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => nav.navigate("1Side", { side })}
+    >
       <FlatList
-        data={GetSideData()}
-        renderItem={({ item, index }) => (
-          <Text>
-            <Text>{item + ":"}</Text>
-            <Text>{type[index]}</Text>
-          </Text>
-        )}
+        data={functionStack}
+        renderItem={({ item, index }) => RenderItem(item, index)}
         scrollEnabled={false}
+        contentContainerStyle={{ justifyContent: "space-around", flexGrow: 1 }}
       />
-    </View>
+    </TouchableOpacity>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    borderWidth: 1,
+    borderRadius: 25,
+    borderColor: "grey",
+  },
+  sideContainer: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  letterButton: {
+    width: 64,
+    aspectRatio: 1,
+    justifyContent: "center",
+    borderWidth: 5,
+    borderRadius: 20,
+    borderColor: "grey",
+    margin: 1,
+  },
+  letterText: {
+    fontSize: 50,
+    fontWeight: "bold",
+    includeFontPadding: false,
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+  functionContainer: {
+    flex: 1,
+    justifyContent: "center",
+    margin: 10,
+  },
+  functionText: {
+    fontSize: 20,
+    includeFontPadding: false,
+    textAlignVertical: "center",
+  },
+});
