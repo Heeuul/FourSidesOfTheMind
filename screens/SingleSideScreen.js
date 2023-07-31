@@ -32,7 +32,10 @@ export default function SingleSideScreen({ route }) {
 
   function RenderLetterButton(item, index) {
     return (
-      <TouchableOpacity onPress={() => FlipFunction(index)}>
+      <TouchableOpacity
+        onPress={() => FlipFunction(index)}
+        style={styles.letterButton}
+      >
         <Text style={styles.letterText}>{item}</Text>
       </TouchableOpacity>
     );
@@ -55,48 +58,61 @@ export default function SingleSideScreen({ route }) {
   }
 
   return (
-    <View>
-      <Text>
+    <View style={{ flex: 1 }}>
+      <View>
         <FlatList
           data={type}
           renderItem={({ item, index }) => RenderLetterButton(item, index)}
           horizontal={true}
           scrollEnabled={false}
+          contentContainerStyle={{
+            flex: 1,
+            justifyContent: "center",
+          }}
         />
-      </Text>
-      <FlatList
-        data={GetLabel(side)}
-        renderItem={({ item, index }) => (
-          <Text>
-            <Text>{item + ": "}</Text>
-            <Text>{functionStack[index]}</Text>
-          </Text>
-        )}
-        scrollEnabled={false}
-      />
+
+        <FlatList
+          data={GetLabel(side)}
+          renderItem={({ item, index }) => (
+            <Text>{item + ": " + functionStack[index]}</Text>
+          )}
+          scrollEnabled={false}
+        />
+      </View>
+
       <Text>{"Quadra: " + GetQuadra(type)}</Text>
-      <FlatList
-        data={Object.keys(expression)}
-        renderItem={({ item }) => (
-          <Text>
-            {item.charAt(0).toUpperCase() +
-              item.slice(1) +
-              ": " +
-              expression[item]}
-          </Text>
-        )}
-      />
-      <FlatList
-        data={Object.keys(worldview)}
-        renderItem={({ item }) => (
-          <Text>
-            {item.charAt(0).toUpperCase() +
-              item.slice(1) +
-              ": " +
-              worldview[item]}
-          </Text>
-        )}
-      />
+
+      <View>
+        <Text style={styles.titleText}>Expressions</Text>
+        <FlatList
+          data={Object.keys(expression)}
+          renderItem={({ item }) => (
+            <Text>
+              {item.charAt(0).toUpperCase() +
+                item.slice(1) +
+                ": " +
+                expression[item]}
+            </Text>
+          )}
+        />
+      </View>
+
+      <View>
+        <Text style={styles.titleText}>Worldview</Text>
+        <FlatList
+          data={Object.keys(worldview)}
+          renderItem={({ item }) => (
+            <Text>
+              {item.charAt(0).toUpperCase() +
+                item.slice(1) +
+                ": " +
+                worldview[item]}
+            </Text>
+          )}
+        />
+      </View>
+
+      <Text style={styles.titleText}>Armament</Text>
       <FlatList
         data={Object.keys(armament)}
         renderItem={({ item }) => (
@@ -113,7 +129,25 @@ export default function SingleSideScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
+  letterButton: {
+    width: 64,
+    aspectRatio: 1,
+    justifyContent: "center",
+    borderRadius: 25,
+    backgroundColor: "black",
+    margin: 2,
+  },
   letterText: {
+    color: "white",
     fontSize: 50,
+    fontWeight: "bold",
+    includeFontPadding: false,
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+  titleText: {
+    fontSize: 50,
+    textAlign: "center",
+    textDecorationLine: "underline",
   },
 });
